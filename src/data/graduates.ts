@@ -199,12 +199,12 @@ function build(): Graduate[] {
       if (status === "Employed") {
         const pool = p.core
           ? rand() < 0.78
-            ? COMPANIES.core
-            : COMPANIES.tech
+            ? COMPANIES['core']!
+            : COMPANIES['tech']!
           : rand() < 0.85
-            ? COMPANIES.tech
-            : COMPANIES.core;
-        const company = pool[Math.floor(rand() * pool.length)]!;
+            ? COMPANIES['tech']!
+            : COMPANIES['core']!;
+        const company = pool![Math.floor(rand() * pool!.length)]!;
         const roles = ROLES[dept]!;
         const relevanceRoll = rand() + (internship ? 0.12 : 0) + (p.core ? -0.1 : 0.05);
         const salary =
