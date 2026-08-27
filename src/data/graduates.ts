@@ -169,10 +169,10 @@ function build(): Graduate[] {
   let n = 0;
 
   for (const dept of DEPARTMENTS) {
-    const p = PROFILE[dept];
-    for (let i = 0; i < COUNTS[dept]; i++) {
+    const p = PROFILE[dept]!;
+    for (let i = 0; i < COUNTS[dept]!; i++) {
       n++;
-      const year = YEARS[Math.floor(rand() * YEARS.length)];
+      const year = YEARS[Math.floor(rand() * YEARS.length)]!;
       const yearLift = (year - 2021) * 0.018; // outcomes improve slightly year over year
       const internship = rand() < (p.core ? 0.55 : 0.74);
       const internLift = internship ? 0.14 : -0.16;
@@ -191,21 +191,21 @@ function build(): Graduate[] {
       else if (roll < employChance + p.higher + p.self) status = "Self Employed";
       else status = "Unemployed";
 
-      const name = `${FIRST_NAMES[Math.floor(rand() * FIRST_NAMES.length)]} ${
-        LAST_NAMES[Math.floor(rand() * LAST_NAMES.length)]
+      const name = `${FIRST_NAMES[Math.floor(rand() * FIRST_NAMES.length)]!} ${
+        LAST_NAMES[Math.floor(rand() * LAST_NAMES.length)]!
       }`;
       const id = `CP${year}${String(n).padStart(3, "0")}`;
 
       if (status === "Employed") {
         const pool = p.core
           ? rand() < 0.78
-            ? COMPANIES.core
-            : COMPANIES.tech
+            ? COMPANIES['core']!
+            : COMPANIES['tech']!
           : rand() < 0.85
-            ? COMPANIES.tech
-            : COMPANIES.core;
-        const company = pool[Math.floor(rand() * pool.length)];
-        const roles = ROLES[dept];
+            ? COMPANIES['tech']!
+            : COMPANIES['core']!;
+        const company = pool![Math.floor(rand() * pool!.length)]!;
+        const roles = ROLES[dept]!;
         const relevanceRoll = rand() + (internship ? 0.12 : 0) + (p.core ? -0.1 : 0.05);
         const salary =
           Math.round(
@@ -220,9 +220,9 @@ function build(): Graduate[] {
           internship,
           employmentStatus: status,
           company: company.name,
-          role: roles[Math.floor(rand() * roles.length)],
+          role: roles[Math.floor(rand() * roles.length)]!,
           industry: company.industry,
-          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)],
+          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)]!,
           salary: Math.max(2.6, salary),
           timeToEmployment: Math.max(
             0,
@@ -244,11 +244,11 @@ function build(): Graduate[] {
           company: null,
           role: null,
           industry: null,
-          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)],
+          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)]!,
           salary: null,
           timeToEmployment: null,
           degreeRelevance: "Not Applicable",
-          higherStudies: HIGHER_STUDIES[Math.floor(rand() * HIGHER_STUDIES.length)],
+          higherStudies: HIGHER_STUDIES[Math.floor(rand() * HIGHER_STUDIES.length)]!,
         });
       } else if (status === "Self Employed") {
         const salary = Math.round(p.salary * (0.5 + rand() * 0.9) * 10) / 10;
@@ -263,7 +263,7 @@ function build(): Graduate[] {
           company: "Self Venture",
           role: rand() < 0.5 ? "Founder" : "Independent Consultant",
           industry: p.core ? "Core Engineering" : "Product & SaaS",
-          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)],
+          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)]!,
           salary: Math.max(2.2, salary),
           timeToEmployment: Math.max(1, Math.round(p.ttm * (0.8 + rand()))),
           degreeRelevance: rand() < 0.5 ? "Moderate" : "Low",
@@ -281,7 +281,7 @@ function build(): Graduate[] {
           company: null,
           role: null,
           industry: null,
-          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)],
+          location: LOCATIONS[Math.floor(rand() * LOCATIONS.length)]!,
           salary: null,
           timeToEmployment: null,
           degreeRelevance: "Not Applicable",
