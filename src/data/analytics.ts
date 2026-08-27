@@ -163,9 +163,9 @@ export function keyTakeaways(rows: Graduate[]): string[] {
 
   if (depts.length > 1) {
     out.push(
-      `${depts[0].department} leads with a ${depts[0].rate}% employment rate, while ${
-        depts[depts.length - 1].department
-      } trails at ${depts[depts.length - 1].rate}%.`,
+      `${depts[0]!.department} leads with a ${depts[0]!.rate}% employment rate, while ${
+        depts[depts.length - 1]!.department
+      } trails at ${depts[depts.length - 1]!.rate}%.`,
     );
   }
   if (intern.withCount && intern.withoutCount) {
@@ -178,11 +178,11 @@ export function keyTakeaways(rows: Graduate[]): string[] {
     );
   }
   if (trend.length > 1) {
-    const delta = trend[trend.length - 1].rate - trend[0].rate;
+    const delta = trend[trend.length - 1]!.rate - trend[0]!.rate;
     out.push(
       `Employment outcomes have ${delta >= 0 ? "improved" : "declined"} by ${Math.abs(
         delta,
-      ).toFixed(1)} points from ${trend[0].year} to ${trend[trend.length - 1].year}.`,
+      ).toFixed(1)} points from ${trend[0]!.year} to ${trend[trend.length - 1]!.year}.`,
     );
   }
   out.push(
@@ -234,10 +234,10 @@ export function insights() {
 
   const positive: Insight[] = [
     {
-      title: `${depts[0].department} outperforms the institutional average`,
-      detail: `${depts[0].department} records a ${depts[0].rate}% employment rate against an institutional average of ${k.employmentRate.toFixed(
+      title: `${depts[0]!.department} outperforms the institutional average`,
+      detail: `${depts[0]!.department} records a ${depts[0]!.rate}% employment rate against an institutional average of ${k.employmentRate.toFixed(
         1,
-      )}%, across ${depts[0].graduates} tracked graduates.`,
+      )}%, across ${depts[0]!.graduates} tracked graduates.`,
     },
     {
       title: "Internships strongly improve employment outcomes",
@@ -249,50 +249,50 @@ export function insights() {
     },
     {
       title: "Year-on-year placement momentum is positive",
-      detail: `Employment rate moved from ${trend[0].rate}% in ${trend[0].year} to ${
-        trend[trend.length - 1].rate
-      }% in ${trend[trend.length - 1].year}, with average salary now ₹${
-        trend[trend.length - 1].avgSalary
+      detail: `Employment rate moved from ${trend[0]!.rate}% in ${trend[0]!.year} to ${
+        trend[trend.length - 1]!.rate
+      }% in ${trend[trend.length - 1]!.year}, with average salary now ₹${
+        trend[trend.length - 1]!.avgSalary
       } LPA.`,
     },
   ];
 
   const attention: Insight[] = [
     {
-      title: `${unemployedByDept[0].department} shows the highest unemployment share`,
-      detail: `${unemployedByDept[0].count} graduates (${unemployedByDept[0].rate.toFixed(
+      title: `${unemployedByDept[0]!.department} shows the highest unemployment share`,
+      detail: `${unemployedByDept[0]!.count} graduates (${unemployedByDept[0]!.rate.toFixed(
         1,
-      )}%) from ${unemployedByDept[0].department} remain unemployed — the widest gap in the institution.`,
+      )}%) from ${unemployedByDept[0]!.department} remain unemployed — the widest gap in the institution.`,
     },
     {
-      title: `Longer time-to-employment in ${slowest[0].department}`,
-      detail: `${slowest[0].department} graduates take ${slowest[0].ttm.toFixed(
+      title: `Longer time-to-employment in ${slowest[0]!.department}`,
+      detail: `${slowest[0]!.department} graduates take ${slowest[0]!.ttm.toFixed(
         1,
       )} months on average to secure a role, versus an institutional mean of ${k.avgTimeToEmployment.toFixed(
         1,
       )} months.`,
     },
     {
-      title: `Degree relevance is weakest in ${lowRelevance[0].department}`,
-      detail: `Only ${lowRelevance[0].rate.toFixed(
+      title: `Degree relevance is weakest in ${lowRelevance[0]!.department}`,
+      detail: `Only ${lowRelevance[0]!.rate.toFixed(
         1,
-      )}% of employed ${lowRelevance[0].department} graduates are in highly degree-relevant roles, indicating skill-to-role mismatch.`,
+      )}% of employed ${lowRelevance[0]!.department} graduates are in highly degree-relevant roles, indicating skill-to-role mismatch.`,
     },
   ];
 
   const recommendations: Insight[] = [
     {
-      title: `Expand industry-linked internships for ${depts[depts.length - 1].department}`,
-      detail: `With a ${depts[depts.length - 1].rate}% employment rate and only ${(
-        (rows.filter((g) => g.department === depts[depts.length - 1].department && g.internship)
+      title: `Expand industry-linked internships for ${depts[depts.length - 1]!.department}`,
+      detail: `With a ${depts[depts.length - 1]!.rate}% employment rate and only ${(
+        (rows.filter((g) => g.department === depts[depts.length - 1]!.department && g.internship)
           .length /
-          rows.filter((g) => g.department === depts[depts.length - 1].department).length) *
+          rows.filter((g) => g.department === depts[depts.length - 1]!.department).length) *
         100
       ).toFixed(0)}% internship participation, structured six-month industry internships should be mandated.`,
     },
     {
-      title: `Launch a placement acceleration cell for ${slowest[0].department}`,
-      detail: `Targeted pre-final-year aptitude drills, mock interviews and early recruiter outreach can compress the ${slowest[0].ttm.toFixed(
+      title: `Launch a placement acceleration cell for ${slowest[0]!.department}`,
+      detail: `Targeted pre-final-year aptitude drills, mock interviews and early recruiter outreach can compress the ${slowest[0]!.ttm.toFixed(
         1,
       )} month time-to-employment.`,
     },
