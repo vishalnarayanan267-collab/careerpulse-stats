@@ -2,10 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, ArrowUpRight, Lightbulb, TrendingUp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
+import { useMemo, useState } from "react";
+
 import { AppShell, PageHeader } from "@/components/app-shell";
-import { Pill } from "@/components/ui-bits";
-import { insights, type Insight } from "@/data/analytics";
-import { GRADUATES } from "@/data/graduates";
+import { FilterSelect, Pill } from "@/components/ui-bits";
+import { applyFilters, EMPTY_FILTERS, insights, type Filters, type Insight } from "@/data/analytics";
+import { datasetOptions, useDataset } from "@/data/dataset-store";
 
 export const Route = createFileRoute("/insights")({
   head: () => ({
@@ -71,16 +73,71 @@ function Section({
   );
 }
 
+const opt = (v: readonly (string | number)[], allLabel: string) => [
+  { value: "all", label: allLabel },
+  ...v.map((x) => ({ value: String(x), label: String(x) })),
+];
+
 function InsightsPage() {
-  const { positive, attention, recommendations, kpis } = insights();
+  const dataset = useDataset();
+  const options = useMemo(() => datasetOptions(dataset.rows), [dataset.rows]);
+  const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
+  const set = (k: keyof Filters) => (v: string) => setFilters((f) => ({ ...f, [k]: v }));
+  const rows = useMemo(() => applyFilters(dataset.rows, filters), [dataset.rows, filters]);
+  const { positive, attention, recommendations, kpis } = useMemo(() => insights(rows), [rows]);
 
   return (
     <AppShell>
       <PageHeader
         title="Insights & Recommendations"
         subtitle="Findings generated from the full outcomes dataset — what is working, where outcomes lag, and the actions that would move the needle."
-        meta={<Pill>Based on {GRADUATES.length} graduate records</Pill>}
+        meta={
+          <div className="flex flex-wrap items-center gap-2">
+            <Pill>Based on {rows.length} graduate records</Pill>
+            <Pill>
+              Data source: {dataset.source === "demo" ? "Demo Dataset" : dataset.label}
+            </Pill>
+          </div>
+        }
       />
+
+      <div className="card-surface mb-6 flex flex-col gap-3 p-4 sm:flex-row sm:flex-wrap sm:items-end">
+        <FilterSelect
+          label="Graduation Year"
+          value={filters.year}
+          onChange={set("year")}
+          options={opt(options.years, "All years")}
+        />
+        <FilterSelect
+          label="Department"
+          value={filters.department}
+          onChange={set("department")}
+          options={opt(options.departments, "All departments")}
+        />
+        <FilterSelect
+          label="Industry"
+          value={filters.industry}
+          onChange={set("industry")}
+          options={opt(options.industries, "All industries")}
+        />
+        <button
+          onClick={() => setFilters(EMPTY_FILTERS)}
+          className="h-10 shrink-0 rounded-lg border border-border bg-muted px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
+        >
+          Reset
+        </button>
+      </div>
+
+      {positive.length === 0 && attention.length === 0 ? (
+        <div className="mb-8 rounded-xl border border-dashed border-border bg-muted/40 px-6 py-14 text-center">
+          <p className="font-display text-sm font-semibold text-foreground">
+            Not enough data for this selection
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Widen the filters or import a larger dataset to generate insights.
+          </p>
+        </div>
+      ) : null}
 
       <div className="card-surface mb-8 flex flex-wrap gap-6 p-5">
         {[
