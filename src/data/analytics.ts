@@ -62,15 +62,37 @@ export function statusBreakdown(rows: Graduate[]) {
     .filter((d) => d.value > 0);
 }
 
+const SHORT: Record<string, string> = {
+  "Electronics & Communication": "ECE",
+  "Information Technology": "IT",
+  "Computer Science": "Computer Science",
+};
+
+const uniqueDepartments = (rows: Graduate[]) => {
+  const known = DEPARTMENTS.filter((d) => rows.some((g) => g.department === d)) as string[];
+  const extra = Array.from(new Set(rows.map((g) => g.department))).filter(
+    (d) => !known.includes(d),
+  );
+  return [...known, ...extra.sort()];
+};
+
+const uniqueYears = (rows: Graduate[]) => {
+  const known = YEARS.filter((y) => rows.some((g) => g.graduationYear === y)) as number[];
+  const extra = Array.from(new Set(rows.map((g) => g.graduationYear))).filter(
+    (y) => !known.includes(y),
+  );
+  return [...known, ...extra].sort((a, b) => a - b);
+};
+
 export function departmentRates(rows: Graduate[]) {
-  return DEPARTMENTS.map((d) => {
+  return uniqueDepartments(rows).map((d) => {
     const set = rows.filter((g) => g.department === d);
     const emp = set.filter(
       (g) => g.employmentStatus === "Employed" || g.employmentStatus === "Self Employed",
     ).length;
     return {
       department: d,
-      short: d === "Electronics & Communication" ? "ECE" : d === "Information Technology" ? "IT" : d,
+      short: SHORT[d] ?? d,
       rate: set.length ? Math.round((emp / set.length) * 1000) / 10 : 0,
       graduates: set.length,
     };
@@ -78,7 +100,7 @@ export function departmentRates(rows: Graduate[]) {
 }
 
 export function yearTrend(rows: Graduate[]) {
-  return YEARS.map((y) => {
+  return uniqueYears(rows).map((y) => {
     const set = rows.filter((g) => g.graduationYear === y);
     const emp = set.filter(
       (g) => g.employmentStatus === "Employed" || g.employmentStatus === "Self Employed",
@@ -92,6 +114,7 @@ export function yearTrend(rows: Graduate[]) {
     };
   }).filter((d) => d.graduates > 0);
 }
+
 
 const SALARY_BANDS = [
   { name: "< 4 LPA", min: 0, max: 4 },
