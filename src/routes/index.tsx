@@ -49,7 +49,7 @@ import {
   yearTrend,
   type Filters,
 } from "@/data/analytics";
-import { DEPARTMENTS, GRADUATES, INDUSTRIES, STATUSES, YEARS } from "@/data/graduates";
+import { datasetOptions, useDataset } from "@/data/dataset-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -84,11 +84,14 @@ const opt = (values: readonly (string | number)[], allLabel: string) => [
 ];
 
 function Dashboard() {
+  const dataset = useDataset();
+  const all = dataset.rows;
+  const options = useMemo(() => datasetOptions(all), [all]);
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const set = (key: keyof Filters) => (v: string) =>
     setFilters((f) => ({ ...f, [key]: v }));
 
-  const rows = useMemo(() => applyFilters(GRADUATES, filters), [filters]);
+  const rows = useMemo(() => applyFilters(all, filters), [all, filters]);
   const k = useMemo(() => kpis(rows), [rows]);
   const status = useMemo(() => statusBreakdown(rows), [rows]);
   const depts = useMemo(() => departmentRates(rows), [rows]);
@@ -107,8 +110,16 @@ function Dashboard() {
         subtitle="Track graduate employment, career outcomes and institutional trends."
         meta={
           <div className="flex flex-wrap items-center gap-2">
-            <Pill>{GRADUATES.length} graduates tracked</Pill>
+            <Pill>
+              Data source: {dataset.source === "demo" ? "Demo Dataset" : "Uploaded Dataset"}
+            </Pill>
+            <Pill>{all.length} graduates tracked</Pill>
             <Pill>{activeFilters} filters active</Pill>
+            <Pill>
+              {dataset.source === "demo"
+                ? "Built-in institutional sample"
+                : `${dataset.label} · imported ${new Date(dataset.updatedAt ?? Date.now()).toLocaleString()}`}
+            </Pill>
           </div>
         }
       />
@@ -119,25 +130,25 @@ function Dashboard() {
             label="Graduation Year"
             value={filters.year}
             onChange={set("year")}
-            options={opt(YEARS, "All years")}
+            options={opt(options.years, "All years")}
           />
           <FilterSelect
             label="Department"
             value={filters.department}
             onChange={set("department")}
-            options={opt(DEPARTMENTS, "All departments")}
+            options={opt(options.departments, "All departments")}
           />
           <FilterSelect
             label="Employment Status"
             value={filters.status}
             onChange={set("status")}
-            options={opt(STATUSES, "All statuses")}
+            options={opt(options.statuses, "All statuses")}
           />
           <FilterSelect
             label="Industry"
             value={filters.industry}
             onChange={set("industry")}
-            options={opt(INDUSTRIES, "All industries")}
+            options={opt(options.industries, "All industries")}
           />
           <button
             onClick={() => setFilters(EMPTY_FILTERS)}
@@ -159,7 +170,7 @@ function Dashboard() {
             <KpiCard
               label="Total Graduates"
               value={String(k.total)}
-              support={`${((k.total / GRADUATES.length) * 100).toFixed(0)}% of tracked cohort`}
+              support={`${all.length ? ((k.total / all.length) * 100).toFixed(0) : 0}% of tracked cohort`}
               icon={Users}
             />
             <KpiCard

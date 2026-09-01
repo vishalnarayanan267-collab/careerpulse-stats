@@ -10,14 +10,8 @@ import {
   StatusBadge,
 } from "@/components/ui-bits";
 import { applyFilters, EMPTY_FILTERS, type Filters } from "@/data/analytics";
-import {
-  DEPARTMENTS,
-  GRADUATES,
-  INDUSTRIES,
-  STATUSES,
-  YEARS,
-  type Graduate,
-} from "@/data/graduates";
+import { datasetOptions, useDataset } from "@/data/dataset-store";
+import { type Graduate } from "@/data/graduates";
 
 export const Route = createFileRoute("/graduates")({
   head: () => ({
@@ -45,12 +39,15 @@ const opt = (v: readonly (string | number)[], allLabel: string) => [
 ];
 
 function GraduatesPage() {
+  const dataset = useDataset();
+  const all = dataset.rows;
+  const options = useMemo(() => datasetOptions(all), [all]);
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Graduate | null>(null);
 
   const rows = useMemo(() => {
-    const base = applyFilters(GRADUATES, filters);
+    const base = applyFilters(all, filters);
     const q = query.trim().toLowerCase();
     if (!q) return base;
     return base.filter((g) =>
@@ -59,7 +56,7 @@ function GraduatesPage() {
         .toLowerCase()
         .includes(q),
     );
-  }, [filters, query]);
+  }, [all, filters, query]);
 
   const set = (k: keyof Filters) => (v: string) =>
     setFilters((f) => ({ ...f, [k]: v }));
@@ -115,7 +112,14 @@ function GraduatesPage() {
       <PageHeader
         title="Graduate Explorer"
         subtitle="Browse individual outcome records. Filter by cohort, department, status or industry, then open a record for the full profile."
-        meta={<Pill>{rows.length} of {GRADUATES.length} records</Pill>}
+        meta={
+          <div className="flex flex-wrap items-center gap-2">
+            <Pill>{rows.length} of {all.length} records</Pill>
+            <Pill>
+              Data source: {dataset.source === "demo" ? "Demo Dataset" : dataset.label}
+            </Pill>
+          </div>
+        }
       />
 
       <div className="card-surface mb-6 p-5">
@@ -130,10 +134,10 @@ function GraduatesPage() {
             />
           </div>
           <div className="flex flex-wrap gap-3">
-            <FilterSelect label="Year" value={filters.year} onChange={set("year")} options={opt(YEARS, "All years")} />
-            <FilterSelect label="Department" value={filters.department} onChange={set("department")} options={opt(DEPARTMENTS, "All departments")} />
-            <FilterSelect label="Status" value={filters.status} onChange={set("status")} options={opt(STATUSES, "All statuses")} />
-            <FilterSelect label="Industry" value={filters.industry} onChange={set("industry")} options={opt(INDUSTRIES, "All industries")} />
+            <FilterSelect label="Year" value={filters.year} onChange={set("year")} options={opt(options.years, "All years")} />
+            <FilterSelect label="Department" value={filters.department} onChange={set("department")} options={opt(options.departments, "All departments")} />
+            <FilterSelect label="Status" value={filters.status} onChange={set("status")} options={opt(options.statuses, "All statuses")} />
+            <FilterSelect label="Industry" value={filters.industry} onChange={set("industry")} options={opt(options.industries, "All industries")} />
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button

@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { BarChart3, LayoutDashboard, Lightbulb, Menu, Users, X } from "lucide-react";
+import { BarChart3, Database, LayoutDashboard, Lightbulb, Menu, Users, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/graduates", label: "Graduate Explorer", icon: Users },
   { to: "/insights", label: "Insights", icon: Lightbulb },
+  { to: "/data", label: "Data Management", icon: Database },
 ] as const;
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
