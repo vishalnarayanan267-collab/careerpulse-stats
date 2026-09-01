@@ -218,14 +218,25 @@ export function keyTakeaways(rows: Graduate[]): string[] {
 
 export type Insight = { title: string; detail: string };
 
-export function insights() {
-  const rows = GRADUATES;
+export function insights(source: Graduate[] = GRADUATES) {
+  const rows = source;
   const k = kpis(rows);
   const depts = departmentRates(rows).sort((a, b) => b.rate - a.rate);
   const intern = internshipImpact(rows);
   const trend = yearTrend(rows);
 
-  const slowest = [...DEPARTMENTS]
+  if (rows.length === 0 || depts.length === 0 || trend.length === 0) {
+    return {
+      positive: [] as Insight[],
+      attention: [] as Insight[],
+      recommendations: [] as Insight[],
+      kpis: k,
+    };
+  }
+
+  const departments = uniqueDepartments(rows);
+
+  const slowest = departments
     .map((d) => {
       const t = rows
         .filter((g) => g.department === d)
@@ -235,7 +246,7 @@ export function insights() {
     })
     .sort((a, b) => b.ttm - a.ttm);
 
-  const lowRelevance = [...DEPARTMENTS]
+  const lowRelevance = departments
     .map((d) => {
       const set = rows.filter(
         (g) =>
@@ -247,13 +258,14 @@ export function insights() {
     })
     .sort((a, b) => a.rate - b.rate);
 
-  const unemployedByDept = [...DEPARTMENTS]
+  const unemployedByDept = departments
     .map((d) => {
       const set = rows.filter((g) => g.department === d);
       const un = set.filter((g) => g.employmentStatus === "Unemployed").length;
       return { department: d, rate: set.length ? (un / set.length) * 100 : 0, count: un };
     })
     .sort((a, b) => b.rate - a.rate);
+
 
   const positive: Insight[] = [
     {
