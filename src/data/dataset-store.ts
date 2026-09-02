@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 import { GRADUATES, type Graduate } from "./graduates";
 
@@ -44,11 +44,15 @@ export function setUploadedDataset(rows: Graduate[], fileName: string) {
     label: fileName,
     updatedAt: new Date().toISOString(),
   };
+  hydrated = true;
+  persist();
   emit();
 }
 
 export function resetToDemoDataset() {
   state = DEMO_STATE;
+  hydrated = true;
+  persist();
   emit();
 }
 
@@ -56,8 +60,41 @@ export function getDatasetState(): DatasetState {
   return state;
 }
 
+const STORAGE_KEY = "careerpulse.dataset";
+
+function persist() {
+  if (typeof window === "undefined") return;
+  try {
+    if (state.source === "demo") window.localStorage.removeItem(STORAGE_KEY);
+    else window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    /* storage unavailable — dataset stays in memory only */
+  }
+}
+
+let hydrated = false;
+
+/** Restores an uploaded dataset after a full page reload (client only). */
+function hydrate() {
+  if (hydrated || typeof window === "undefined") return;
+  hydrated = true;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as DatasetState;
+    if (Array.isArray(parsed?.rows) && parsed.rows.length) {
+      state = { ...parsed, source: "upload" };
+      emit();
+    }
+  } catch {
+    /* ignore corrupted storage */
+  }
+}
+
 export function useDataset(): DatasetState {
-  return useSyncExternalStore(subscribe, getDatasetState, () => DEMO_STATE);
+  const value = useSyncExternalStore(subscribe, getDatasetState, () => DEMO_STATE);
+  useEffect(hydrate, []);
+  return value;
 }
 
 /** Filter option values derived from whatever dataset is active. */
