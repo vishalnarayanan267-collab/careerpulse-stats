@@ -42,7 +42,7 @@ export const Route = createFileRoute("/data")({
       },
     ],
   }),
-  component: DataPage;
+  component: DataPage,
 });
 
 function DataPage() {
