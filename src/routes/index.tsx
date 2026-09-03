@@ -409,9 +409,12 @@ function Dashboard() {
                   <CartesianGrid vertical={false} stroke="var(--border)" />
                   <XAxis
                     dataKey="name"
-                    tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                    tick={{ fontSize: isMobile ? 9 : 10, fill: "var(--muted-foreground)" }}
                     stroke="var(--border)"
                     interval={0}
+                    angle={isMobile ? -25 : 0}
+                    textAnchor="end"
+                    height={isMobile ? 55 : 30}
                   />
                   <YAxis
                     tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
