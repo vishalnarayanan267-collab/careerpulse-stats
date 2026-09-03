@@ -310,7 +310,7 @@ function Dashboard() {
                     stroke="var(--border)"
                   />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Legend iconType="plainline" wrapperStyle={{ fontSize: 12 }} />
+                  <Legend iconType="plainline" wrapperStyle={{ fontSize: isMobile ? 10 : 12 }} />
                   <Line
                     yAxisId="left"
                     type="monotone"
