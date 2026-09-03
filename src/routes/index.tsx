@@ -267,8 +267,8 @@ function Dashboard() {
                   <YAxis
                     type="category"
                     dataKey="short"
-                    width={112}
-                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                    width={isMobile ? 92 : 112}
+                    tick={{ fontSize: isMobile ? 9 : 11, fill: "var(--muted-foreground)" }}
                     stroke="var(--border)"
                   />
                   <Tooltip
