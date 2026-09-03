@@ -50,6 +50,7 @@ import {
   type Filters,
 } from "@/data/analytics";
 import { datasetOptions, useDataset } from "@/data/dataset-store";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -84,6 +85,7 @@ const opt = (values: readonly (string | number)[], allLabel: string) => [
 ];
 
 function Dashboard() {
+  const isMobile = useIsMobile();
   const dataset = useDataset();
   const all = dataset.rows;
   const options = useMemo(() => datasetOptions(all), [all]);
