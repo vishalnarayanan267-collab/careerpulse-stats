@@ -211,7 +211,7 @@ function Dashboard() {
             />
           </div>
 
-          <div className="mt-6 grid gap-4 xl:grid-cols-3">
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <ChartCard
               title="Employment Status"
               description="Outcome split for the filtered cohort"
