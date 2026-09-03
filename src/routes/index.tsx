@@ -343,8 +343,8 @@ function Dashboard() {
                     data={relevance}
                     dataKey="value"
                     nameKey="name"
-                    innerRadius={52}
-                    outerRadius={88}
+                    innerRadius={isMobile ? 44 : 52}
+                    outerRadius={isMobile ? 72 : 88}
                     paddingAngle={3}
                     stroke="var(--card)"
                     strokeWidth={2}
@@ -360,7 +360,7 @@ function Dashboard() {
                   <Legend
                     verticalAlign="bottom"
                     iconType="circle"
-                    wrapperStyle={{ fontSize: 12 }}
+                    wrapperStyle={{ fontSize: isMobile ? 10 : 12 }}
                   />
                 </PieChart>
               </ResponsiveContainer>
