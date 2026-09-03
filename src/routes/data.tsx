@@ -246,7 +246,7 @@ function DataPage() {
             <button
               onClick={applyDataset}
               disabled={!result.ok}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               <Database className="h-3.5 w-3.5" />
               {applied ? "Dataset applied" : "Analyze & use this dataset"}
@@ -306,27 +306,27 @@ function DataPage() {
               <table className="w-full min-w-[900px] text-left text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/50 text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
-                    <th className="px-4 py-3 font-semibold">Student ID</th>
-                    <th className="px-4 py-3 font-semibold">Name</th>
-                    <th className="px-4 py-3 font-semibold">Department</th>
-                    <th className="px-4 py-3 font-semibold">Year</th>
-                    <th className="px-4 py-3 font-semibold">Status</th>
-                    <th className="px-4 py-3 font-semibold">Company</th>
-                    <th className="px-4 py-3 text-right font-semibold">Salary</th>
+                    <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Student ID</th>
+                    <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Name</th>
+                    <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Department</th>
+                    <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Year</th>
+                    <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Status</th>
+                    <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Company</th>
+                    <th className="px-3 py-2.5 text-right font-semibold sm:px-4 sm:py-3">Salary</th>
                   </tr>
                 </thead>
                 <tbody>
                   {preview.map((g) => (
                     <tr key={g.id} className="border-b border-border/70 last:border-0">
-                      <td className="num px-4 py-3 text-muted-foreground">{g.id}</td>
-                      <td className="px-4 py-3 font-medium text-foreground">{g.name}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{g.department}</td>
-                      <td className="num px-4 py-3 text-muted-foreground">{g.graduationYear}</td>
-                      <td className="px-4 py-3">
+                      <td className="num px-3 py-2.5 text-muted-foreground sm:px-4 sm:py-3">{g.id}</td>
+                      <td className="px-3 py-2.5 font-medium text-foreground sm:px-4 sm:py-3">{g.name}</td>
+                      <td className="px-3 py-2.5 text-muted-foreground sm:px-4 sm:py-3">{g.department}</td>
+                      <td className="num px-3 py-2.5 text-muted-foreground sm:px-4 sm:py-3">{g.graduationYear}</td>
+                      <td className="px-3 py-2.5 sm:px-4 sm:py-3">
                         <StatusBadge status={g.employmentStatus} />
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground">{g.company ?? "—"}</td>
-                      <td className="num px-4 py-3 text-right text-muted-foreground">
+                      <td className="px-3 py-2.5 text-muted-foreground sm:px-4 sm:py-3">{g.company ?? "—"}</td>
+                      <td className="num px-3 py-2.5 text-right text-muted-foreground sm:px-4 sm:py-3">
                         {g.salary !== null ? `₹${g.salary.toFixed(1)} LPA` : "—"}
                       </td>
                     </tr>

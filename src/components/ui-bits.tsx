@@ -70,7 +70,7 @@ export function StatusBadge({ status }: { status: EmploymentStatus }) {
   };
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset ${map[status]}`}
+      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset ${map[status]}`}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       {status}
@@ -80,7 +80,7 @@ export function StatusBadge({ status }: { status: EmploymentStatus }) {
 
 export function Pill({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-border bg-muted px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+    <span className="inline-flex items-center whitespace-nowrap rounded-full border border-border bg-muted px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
       {children}
     </span>
   );
@@ -98,14 +98,14 @@ export function FilterSelect({
   onChange: (v: string) => void;
 }) {
   return (
-    <label className="flex min-w-0 flex-1 flex-col gap-1.5 sm:min-w-[160px]">
+    <label className="flex min-w-0 w-full flex-1 flex-col gap-1.5 sm:min-w-[160px]">
       <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
         {label}
       </span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-full cursor-pointer rounded-lg border border-input bg-card px-3 text-sm font-medium text-foreground shadow-sm outline-none transition-colors hover:border-ring focus:border-ring focus:ring-2 focus:ring-ring/25"
+        className="h-10 w-full min-w-0 cursor-pointer truncate rounded-lg border border-input bg-card px-3 text-xs font-medium text-foreground shadow-sm outline-none transition-colors hover:border-ring focus:border-ring focus:ring-2 focus:ring-ring/25 sm:text-sm"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>

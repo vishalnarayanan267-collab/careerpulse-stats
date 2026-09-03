@@ -50,6 +50,7 @@ import {
   type Filters,
 } from "@/data/analytics";
 import { datasetOptions, useDataset } from "@/data/dataset-store";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -84,6 +85,7 @@ const opt = (values: readonly (string | number)[], allLabel: string) => [
 ];
 
 function Dashboard() {
+  const isMobile = useIsMobile();
   const dataset = useDataset();
   const all = dataset.rows;
   const options = useMemo(() => datasetOptions(all), [all]);
@@ -209,7 +211,7 @@ function Dashboard() {
             />
           </div>
 
-          <div className="mt-6 grid gap-4 xl:grid-cols-3">
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <ChartCard
               title="Employment Status"
               description="Outcome split for the filtered cohort"
@@ -220,8 +222,8 @@ function Dashboard() {
                     data={status}
                     dataKey="value"
                     nameKey="name"
-                    innerRadius={58}
-                    outerRadius={88}
+                    innerRadius={isMobile ? 48 : 58}
+                    outerRadius={isMobile ? 72 : 88}
                     paddingAngle={3}
                     stroke="var(--card)"
                     strokeWidth={2}
@@ -237,7 +239,7 @@ function Dashboard() {
                   <Legend
                     verticalAlign="bottom"
                     iconType="circle"
-                    wrapperStyle={{ fontSize: 12 }}
+                    wrapperStyle={{ fontSize: isMobile ? 10 : 12 }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -265,8 +267,8 @@ function Dashboard() {
                   <YAxis
                     type="category"
                     dataKey="short"
-                    width={112}
-                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                    width={isMobile ? 92 : 112}
+                    tick={{ fontSize: isMobile ? 9 : 11, fill: "var(--muted-foreground)" }}
                     stroke="var(--border)"
                   />
                   <Tooltip
@@ -308,7 +310,7 @@ function Dashboard() {
                     stroke="var(--border)"
                   />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Legend iconType="plainline" wrapperStyle={{ fontSize: 12 }} />
+                  <Legend iconType="plainline" wrapperStyle={{ fontSize: isMobile ? 10 : 12 }} />
                   <Line
                     yAxisId="left"
                     type="monotone"
@@ -341,8 +343,8 @@ function Dashboard() {
                     data={relevance}
                     dataKey="value"
                     nameKey="name"
-                    innerRadius={52}
-                    outerRadius={88}
+                    innerRadius={isMobile ? 44 : 52}
+                    outerRadius={isMobile ? 72 : 88}
                     paddingAngle={3}
                     stroke="var(--card)"
                     strokeWidth={2}
@@ -358,7 +360,7 @@ function Dashboard() {
                   <Legend
                     verticalAlign="bottom"
                     iconType="circle"
-                    wrapperStyle={{ fontSize: 12 }}
+                    wrapperStyle={{ fontSize: isMobile ? 10 : 12 }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -373,9 +375,12 @@ function Dashboard() {
                   <CartesianGrid vertical={false} stroke="var(--border)" />
                   <XAxis
                     dataKey="name"
-                    tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                    tick={{ fontSize: isMobile ? 9 : 10, fill: "var(--muted-foreground)" }}
                     stroke="var(--border)"
                     interval={0}
+                    angle={isMobile ? -25 : 0}
+                    textAnchor="end"
+                    height={isMobile ? 55 : 30}
                   />
                   <YAxis
                     tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
@@ -404,9 +409,12 @@ function Dashboard() {
                   <CartesianGrid vertical={false} stroke="var(--border)" />
                   <XAxis
                     dataKey="name"
-                    tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                    tick={{ fontSize: isMobile ? 9 : 10, fill: "var(--muted-foreground)" }}
                     stroke="var(--border)"
                     interval={0}
+                    angle={isMobile ? -25 : 0}
+                    textAnchor="end"
+                    height={isMobile ? 55 : 30}
                   />
                   <YAxis
                     tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
@@ -435,12 +443,12 @@ function Dashboard() {
                   <CartesianGrid vertical={false} stroke="var(--border)" />
                   <XAxis
                     dataKey="short"
-                    tick={{ fontSize: 9, fill: "var(--muted-foreground)" }}
+                    tick={{ fontSize: isMobile ? 8 : 9, fill: "var(--muted-foreground)" }}
                     stroke="var(--border)"
                     interval={0}
-                    angle={-18}
+                    angle={isMobile ? -35 : -18}
                     textAnchor="end"
-                    height={54}
+                    height={isMobile ? 72 : 54}
                   />
                   <YAxis
                     tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}

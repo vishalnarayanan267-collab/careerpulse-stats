@@ -130,10 +130,10 @@ function GraduatesPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by name, company, role or location…"
-              className="h-10 w-full rounded-lg border border-input bg-card pl-9 pr-3 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground hover:border-ring focus:border-ring focus:ring-2 focus:ring-ring/25"
+              className="h-10 w-full min-w-0 rounded-lg border border-input bg-card pl-9 pr-3 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-xs placeholder:text-muted-foreground hover:border-ring focus:border-ring focus:ring-2 focus:ring-ring/25 sm:placeholder:text-sm"
             />
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
             <FilterSelect label="Year" value={filters.year} onChange={set("year")} options={opt(options.years, "All years")} />
             <FilterSelect label="Department" value={filters.department} onChange={set("department")} options={opt(options.departments, "All departments")} />
             <FilterSelect label="Status" value={filters.status} onChange={set("status")} options={opt(options.statuses, "All statuses")} />
@@ -170,12 +170,12 @@ function GraduatesPage() {
             <table className="w-full min-w-[880px] text-left text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/50 text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
-                  <th className="px-4 py-3 font-semibold">Graduate</th>
-                  <th className="px-4 py-3 font-semibold">Department</th>
-                  <th className="px-4 py-3 font-semibold">Year</th>
-                  <th className="px-4 py-3 font-semibold">Status</th>
-                  <th className="px-4 py-3 font-semibold">Company / Path</th>
-                  <th className="px-4 py-3 text-right font-semibold">Salary</th>
+                  <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Graduate</th>
+                  <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Department</th>
+                  <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Year</th>
+                  <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Status</th>
+                  <th className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Company / Path</th>
+                  <th className="px-3 py-2.5 text-right font-semibold sm:px-4 sm:py-3">Salary</th>
                 </tr>
               </thead>
               <tbody>
@@ -185,18 +185,18 @@ function GraduatesPage() {
                     onClick={() => setSelected(g)}
                     className="cursor-pointer border-b border-border/70 transition-colors last:border-0 hover:bg-muted/50"
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-3 py-2.5 sm:px-4 sm:py-3">
                       <p className="font-medium text-foreground">{g.name}</p>
                       <p className="text-xs text-muted-foreground">CGPA {g.cgpa.toFixed(2)}</p>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{g.department}</td>
-                    <td className="num px-4 py-3 text-muted-foreground">{g.graduationYear}</td>
-                    <td className="px-4 py-3"><StatusBadge status={g.employmentStatus} /></td>
-                    <td className="px-4 py-3">
+                    <td className="px-3 py-2.5 text-muted-foreground sm:px-4 sm:py-3">{g.department}</td>
+                    <td className="num px-3 py-2.5 text-muted-foreground sm:px-4 sm:py-3">{g.graduationYear}</td>
+                    <td className="px-3 py-2.5 sm:px-4 sm:py-3"><StatusBadge status={g.employmentStatus} /></td>
+                    <td className="px-3 py-2.5 sm:px-4 sm:py-3">
                       <p className="text-foreground">{g.company ?? g.higherStudies ?? "—"}</p>
                       <p className="text-xs text-muted-foreground">{g.role ?? g.location ?? "—"}</p>
                     </td>
-                    <td className="num px-4 py-3 text-right font-semibold text-foreground">
+                    <td className="num px-3 py-2.5 text-right font-semibold text-foreground sm:px-4 sm:py-3">
                       {g.salary !== null ? `₹${g.salary.toFixed(1)} L` : "—"}
                     </td>
                   </tr>
@@ -231,7 +231,7 @@ function GraduateModal({ graduate: g, onClose }: { graduate: Graduate; onClose: 
         role="dialog"
         aria-modal="true"
         aria-label={`${g.name} profile`}
-        className="relative max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-t-2xl border border-border bg-card p-6 shadow-hover sm:rounded-2xl"
+        className="relative max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-t-2xl border border-border bg-card p-4 shadow-hover sm:rounded-2xl sm:p-6"
       >
         <button
           aria-label="Close"
